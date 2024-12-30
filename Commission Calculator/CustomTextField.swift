@@ -8,11 +8,16 @@
 import SwiftUI
 
 struct CustomTextField: View {
+    let placeholder: String
+    @Binding var text: String
+    
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        
+        TextField(placeholder, text: $text)
+            .keyboardType(.numberPad)
+            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .padding()
+            .frame(width: 170, height: 50)
     }
-}
-
-#Preview {
-    CustomTextField()
 }
