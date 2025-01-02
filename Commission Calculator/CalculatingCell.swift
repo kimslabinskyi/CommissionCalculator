@@ -20,7 +20,7 @@ struct CalculatingCell: View {
     var data: CalculatingCellData
     
     var body: some View {
-            VStack(alignment: .leading, spacing: 10) {
+            VStack(alignment: .leading ) {
                 HStack {
                     Text("Commission: ")
                         .font(.title)
