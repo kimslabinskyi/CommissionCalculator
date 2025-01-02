@@ -21,6 +21,7 @@ struct CalculatingCellData {
 }
 
 struct CalculatingCell: View {
+    @Environment(\.colorScheme) var colorScheme
     @State private var inputCommission: String = ""
     @State private var inputPrice: String = ""
     @State private var inputQuantity: String = ""
@@ -36,7 +37,7 @@ struct CalculatingCell: View {
 
                             Spacer()
                     
-                    CustomTextField(placeholder: "0 %", text: $inputCommission)
+                    CustomTextField(text: $inputCommission, placeholder: "0 %")
                 }
                 
                 Divider()
@@ -47,7 +48,7 @@ struct CalculatingCell: View {
                         .font(.headline)
                     Spacer()
                     
-                    CustomTextField(placeholder: "0.00", text: $inputPrice)
+                    CustomTextField(text: $inputPrice, placeholder: "0.00")
                 }
                 
                 HStack {
@@ -55,7 +56,7 @@ struct CalculatingCell: View {
                         .font(.headline)
                     Spacer()
                     
-                    CustomTextField(placeholder: "0", text: $inputQuantity)
+                    CustomTextField(text: $inputQuantity, placeholder: "0")
                 }
                 
                 Divider()
@@ -67,6 +68,7 @@ struct CalculatingCell: View {
                         dismissKeyboard()
                     }) {
                         Text("Calculate")
+                            .bold()
                             .padding(.horizontal)
                             .padding(.vertical, 10)
                             .background(Color.green)
@@ -82,7 +84,7 @@ struct CalculatingCell: View {
                 }
             }
             .padding()
-            .background(Color.gray.brightness(0.2))
+            .background(colorScheme == .dark ? Color.black : Color.white) 
             .clipShape(RoundedRectangle(cornerRadius: 20))
             .padding(.horizontal)
     }

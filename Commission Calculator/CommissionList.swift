@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CommissionList: View {
-    //var commission = 20
+    @Environment(\.colorScheme) var colorScheme
     let items: [CalculatingCellData] = [
         CalculatingCellData(commission: 20, price: 555, quantity: 1),
         CalculatingCellData(commission: 20, price: 555, quantity: 1),
@@ -31,8 +31,21 @@ struct CommissionList: View {
             }
             .listStyle(PlainListStyle())
             .scrollContentBackground(.hidden)
+            .background(
+                LinearGradient(gradient: Gradient(colors: gradientColors),
+                               startPoint: .top,
+                               endPoint: .bottom)
+                )
         }
     }
+    
+    var gradientColors: [Color] {
+        colorScheme == .dark
+        ? [Color.green, Color.black.opacity(0)]
+        : [Color.gray.opacity(0.3), Color.green]
+        
+    }
+    
 }
 
 #Preview {
