@@ -7,6 +7,13 @@
 
 import SwiftUI
 
+extension View {
+    func dismissKeyboard() {
+        UIApplication.shared.dismissKeyboard()
+    }
+    
+}
+
 struct CalculatingCellData {
     let commission: Int
     let price: Int
@@ -55,8 +62,17 @@ struct CalculatingCell: View {
                 
                 
                 HStack {
-                    Text("Total: ")
-                        .font(.title)
+                    Button(action: {
+                        print("Button pressed")
+                        dismissKeyboard()
+                    }) {
+                        Text("Calculate")
+                            .padding(.horizontal)
+                            .padding(.vertical, 10)
+                            .background(Color.green)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                    }
                     
                     Spacer()
                     
@@ -66,7 +82,7 @@ struct CalculatingCell: View {
                 }
             }
             .padding()
-            .background(Color.green)
+            .background(Color.gray.brightness(0.2))
             .clipShape(RoundedRectangle(cornerRadius: 20))
             .padding(.horizontal)
     }
@@ -79,8 +95,17 @@ struct CalculatingCell: View {
 //        CalculatingCell(data: testData)
 //    }
 //}
-
+ 
 #Preview {
     let testData = CalculatingCellData(commission: 20, price: 100, quantity: 5)
     CalculatingCell(data: testData)
+}
+
+
+extension UIApplication {
+    func dismissKeyboard(){
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+            windowScene.windows.first { $0.isKeyWindow }?.endEditing(true)
+        }
+    }
 }
