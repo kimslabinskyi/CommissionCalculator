@@ -89,21 +89,13 @@ struct CalculatingCell: View {
             
             HStack {
                 Button(action: {
-                    print("Button pressed")
-                    print("Input commission = \(inputCommission)")
-                    print("Input price = \(inputPrice)")
-                    print("Input quantity = \(inputQuantity)")
-                    
-                    displayedText = (String((inputPrice - inputPrice/100 * inputCommission) * inputQuantity))
                     dismissKeyboard()
                 }) {
-                    Text("Calculate")
+                    Text("Sum")
                         .bold()
-                        .padding(.horizontal)
-                        .padding(.vertical, 10)
-                        .background(Color.green)
+                        .font(.headline)
+                        .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
                         .foregroundColor(.white)
-                        .cornerRadius(10)
                 }
                 
                 Spacer()
@@ -112,6 +104,7 @@ struct CalculatingCell: View {
                     .font(.title)
                     .padding(.horizontal)
             }
+            
         }
         .padding()
         .background(colorScheme == .dark ? Color.black : Color.white)
