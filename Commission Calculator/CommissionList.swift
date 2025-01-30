@@ -9,14 +9,12 @@ import SwiftUI
 
 struct CommissionList: View {
     @Environment(\.colorScheme) var colorScheme
-        // @Binding var GoToSettings: Bool
     @State private var items: [CalculatingCellData] = [
-        CalculatingCellData(commission: 20, price: 555, quantity: 1),
-        CalculatingCellData(commission: 20, price: 555, quantity: 1),
-        CalculatingCellData(commission: 20, price: 555, quantity: 1),
-        CalculatingCellData(commission: 20, price: 555, quantity: 1),
-        CalculatingCellData(commission: 20, price: 555, quantity: 1)
-        
+        CalculatingCellData(value: 0.0),
+        CalculatingCellData(value: 0.0),
+        CalculatingCellData(value: 0.0),
+        CalculatingCellData(value: 0.0),
+        CalculatingCellData(value: 0.0)
     ]
     
     var body: some View {
@@ -24,7 +22,7 @@ struct CommissionList: View {
             VStack {
                 List {
                     ForEach(items.indices, id: \.self) { index in
-                        CalculatingCell(data: items[index])
+                        CalculatingCell(data: $items[index])
                             .listRowInsets(EdgeInsets())
                             .listRowBackground(Color.clear)
                             .padding(.vertical, 10)
@@ -57,7 +55,7 @@ struct CommissionList: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         withAnimation {
-                            items.append(CalculatingCellData(commission: 20, price: 0, quantity: 0))
+                            items.append(CalculatingCellData(value: 0.0))
                         }
                     } label: {
                         Image(systemName: "plus")

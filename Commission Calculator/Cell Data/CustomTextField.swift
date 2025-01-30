@@ -20,7 +20,6 @@ struct CustomTextField: View {
     }()
     
     var body: some View {
-        
         TextField(placeholder, text: $text)
             .keyboardType(.decimalPad)
             .padding()
@@ -32,5 +31,8 @@ struct CustomTextField: View {
                 RoundedRectangle(cornerRadius: 8)
                     .stroke(Color.secondary, lineWidth: 1)
             )
+            .onTapGesture {
+                text = ""
+            }
     }
 }

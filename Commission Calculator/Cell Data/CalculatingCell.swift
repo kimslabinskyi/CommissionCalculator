@@ -15,9 +15,7 @@ extension View {
 }
 
 struct CalculatingCellData {
-    let commission: Int
-    let price: Int
-    let quantity: Int
+    var value: Double
 }
 
 struct CalculatingCell: View {
@@ -25,8 +23,7 @@ struct CalculatingCell: View {
     @State private var inputCommission: Double = 0
     @State private var inputPrice: Double = 0
     @State private var inputQuantity: Double = 0
-    @State private var displayedText: String = "0.00"
-    var data: CalculatingCellData
+    @Binding var data: CalculatingCellData
     
     var body: some View {
         VStack(alignment: .leading ) {
@@ -40,7 +37,7 @@ struct CalculatingCell: View {
                 
                 CustomTextField(
                     text: Binding(
-                        get: { String(inputCommission) },
+                        get: { inputCommission == 0 ? "" : String(inputCommission) },
                         set: { newValue in
                             if let doubleValue = Double(newValue.replacingOccurrences(of: ",", with: ".")) {
                                 inputCommission = doubleValue
@@ -59,7 +56,7 @@ struct CalculatingCell: View {
                 Spacer()
                 
                 CustomTextField(text: Binding(
-                    get: { String(inputPrice) },
+                    get: { inputPrice == 0 ? "" : String(inputPrice) },
                     set: { newValue in
                         if let doubleValue = Double(newValue.replacingOccurrences(of: ",", with: ".")) {
                             inputPrice = doubleValue
@@ -74,7 +71,7 @@ struct CalculatingCell: View {
                 Spacer()
                 
                 CustomTextField(text: Binding(
-                    get: { String(inputQuantity) },
+                    get: { inputQuantity == 0 ? "" : String(inputQuantity) },
                     set: { newValue in
                         if let doubleValue = Double(newValue) {
                             inputQuantity = doubleValue
@@ -90,6 +87,8 @@ struct CalculatingCell: View {
             HStack {
                 Button(action: {
                     dismissKeyboard()
+                    let newValue = (inputPrice - inputPrice/100 * inputCommission) * inputQuantity
+                    data.value = newValue
                 }) {
                     Text("Sum")
                         .bold()
@@ -121,10 +120,10 @@ struct CalculatingCell: View {
 //    }
 //}
 
-#Preview {
-    let testData = CalculatingCellData(commission: 20, price: 100, quantity: 5)
-    CalculatingCell(data: testData)
-}
+//#Preview {
+//    let testData = CalculatingCellData(commission: 20, price: 100, quantity: 5)
+//    CalculatingCell(data: testData)
+//}
 
 
 extension UIApplication {
