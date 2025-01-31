@@ -14,7 +14,8 @@ extension View {
     
 }
 
-struct CalculatingCellData {
+struct CalculatingCellData: Identifiable, Equatable {
+    var id = UUID()
     var value: Double
 }
 

@@ -31,6 +31,8 @@ struct CommissionList: View {
                             .padding(.vertical, 10)
                             .listRowSeparator(.hidden)
                             .transition(.slide)
+                    }.onDelete { indexSets in
+                        items.remove(atOffsets: indexSets)
                     }
                 }
                 .listStyle(PlainListStyle())
@@ -38,8 +40,8 @@ struct CommissionList: View {
                 .background(
                     LinearGradient(gradient: Gradient(colors: gradientColors),
                                    startPoint: .top,
-                                   endPoint: .bottom)
-                )
+                                   endPoint: .bottom))
+                .animation(.default, value: items)
             }
             .toolbar {
                 ToolbarItem(placement: .principal) {
@@ -68,7 +70,7 @@ struct CommissionList: View {
                     }
                 }
             }
-            .navigationBarTitleDisplayMode(.inline) 
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
     
