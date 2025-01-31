@@ -16,6 +16,9 @@ struct CommissionList: View {
         CalculatingCellData(value: 0.0),
         CalculatingCellData(value: 0.0)
     ]
+    var totalSum: Double {
+        items.reduce(0) { $0 + $1.value }
+    }
     
     var body: some View {
         NavigationStack {
@@ -40,7 +43,7 @@ struct CommissionList: View {
             }
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    Text("Balance: 0")
+                    Text("Balance: \(totalSum, specifier: "%.2f")")
                         .font(.system(size: 28, weight: .bold, design: .default))
                 }
                 
@@ -55,6 +58,7 @@ struct CommissionList: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         withAnimation {
+                            print(items)
                             items.append(CalculatingCellData(value: 0.0))
                         }
                     } label: {
@@ -64,7 +68,7 @@ struct CommissionList: View {
                     }
                 }
             }
-            .navigationBarTitleDisplayMode(.inline) // For compact toolbar styling
+            .navigationBarTitleDisplayMode(.inline) 
         }
     }
     

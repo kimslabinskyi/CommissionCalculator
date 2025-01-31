@@ -21,6 +21,7 @@ struct SettingsView: View {
 
 /*
  * default commission
+ * delete all actual data
  * enable haptics
  * developer info
  * currency

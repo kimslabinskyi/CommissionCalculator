@@ -23,6 +23,7 @@ struct CalculatingCell: View {
     @State private var inputCommission: Double = 0
     @State private var inputPrice: Double = 0
     @State private var inputQuantity: Double = 0
+    @State private var value: Double = 0
     @Binding var data: CalculatingCellData
     
     var body: some View {
