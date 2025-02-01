@@ -23,7 +23,6 @@ struct CustomTextField: View {
         TextField(placeholder, text: $text)
             .keyboardType(.decimalPad)
             .padding()
-            .frame(width: 170, height: 50)
             .background(colorScheme == .dark ? Color.gray.opacity(0.5) : Color.white)
             .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
             .cornerRadius(10)

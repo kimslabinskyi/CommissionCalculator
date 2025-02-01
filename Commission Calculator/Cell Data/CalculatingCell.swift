@@ -21,11 +21,11 @@ struct CalculatingCellData: Identifiable, Equatable {
 
 struct CalculatingCell: View {
     @Environment(\.colorScheme) var colorScheme
-    @State private var inputCommission: Double = 0
+    @Binding var data: CalculatingCellData
+    @Binding var inputCommission: Double
     @State private var inputPrice: Double = 0
     @State private var inputQuantity: Double = 0
     @State private var value: Double = 0
-    @Binding var data: CalculatingCellData
     
     var body: some View {
         VStack(alignment: .leading ) {
@@ -47,6 +47,7 @@ struct CalculatingCell: View {
                         }
                     ),
                     placeholder: "0 %")
+                .frame(width: 170, height: 50)
             }
             
             Divider()
@@ -65,6 +66,7 @@ struct CalculatingCell: View {
                         }
                     }
                 ), placeholder: "0.00")
+                .frame(width: 170, height: 50)
             }
             
             HStack {
@@ -81,6 +83,7 @@ struct CalculatingCell: View {
                     }
                     
                 ), placeholder: "0")
+                .frame(width: 170, height: 50)
             }
             
             Divider()

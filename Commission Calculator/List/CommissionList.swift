@@ -10,12 +10,9 @@ import SwiftUI
 struct CommissionList: View {
     @Environment(\.colorScheme) var colorScheme
     @State private var items: [CalculatingCellData] = [
-        CalculatingCellData(value: 0.0),
-        CalculatingCellData(value: 0.0),
-        CalculatingCellData(value: 0.0),
-        CalculatingCellData(value: 0.0),
         CalculatingCellData(value: 0.0)
     ]
+    @State private var commission: Double = 0
     var totalSum: Double {
         items.reduce(0) { $0 + $1.value }
     }
@@ -25,7 +22,7 @@ struct CommissionList: View {
             VStack {
                 List {
                     ForEach(items.indices, id: \.self) { index in
-                        CalculatingCell(data: $items[index])
+                        CalculatingCell(data: $items[index], inputCommission: $commission)
                             .listRowInsets(EdgeInsets())
                             .listRowBackground(Color.clear)
                             .padding(.vertical, 10)
@@ -46,11 +43,11 @@ struct CommissionList: View {
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Text("Balance: \(totalSum, specifier: "%.2f")")
-                        .font(.system(size: 28, weight: .bold, design: .default))
+                        .font(.system(size: 24, weight: .bold, design: .default))
                 }
                 
                 ToolbarItem(placement: .navigationBarLeading) {
-                    NavigationLink(destination: SettingsView()) {
+                    NavigationLink(destination: SettingsView(commission: $commission)) {
                         Image(systemName: "gear")
                             .imageScale(.large)
                             .foregroundColor(colorScheme == .dark ? .white : .black)
