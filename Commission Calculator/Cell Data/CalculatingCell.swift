@@ -24,7 +24,7 @@ struct CalculatingCell: View {
     @Binding var data: CalculatingCellData
     @Binding var inputCommission: Double
     @State private var inputPrice: Double = 0
-    @State private var inputQuantity: Double = 0
+    @State private var inputQuantity: Int = 0
     @State private var value: Double = 0
     
     var body: some View {
@@ -77,8 +77,8 @@ struct CalculatingCell: View {
                 CustomTextField(text: Binding(
                     get: { inputQuantity == 0 ? "" : String(inputQuantity) },
                     set: { newValue in
-                        if let doubleValue = Double(newValue) {
-                            inputQuantity = doubleValue
+                        if let intValue = Int(newValue) {
+                            inputQuantity = intValue
                         }
                     }
                     
@@ -92,7 +92,7 @@ struct CalculatingCell: View {
             HStack {
                 Button(action: {
                     dismissKeyboard()
-                    let newValue = (inputPrice - inputPrice/100 * inputCommission) * inputQuantity
+                    let newValue = (inputPrice - inputPrice/100 * inputCommission) * Double(inputQuantity)
                     data.value = newValue
                 }) {
                     Text("Sum")
@@ -104,7 +104,7 @@ struct CalculatingCell: View {
                 
                 Spacer()
                 
-                Text(String((inputPrice - inputPrice/100 * inputCommission) * inputQuantity))
+                Text(String(format: "%.2f", (inputPrice - inputPrice/100 * inputCommission) * Double(inputQuantity)))
                     .font(.title)
                     .padding(.horizontal)
             }
