@@ -23,7 +23,7 @@ struct CommissionList: View {
             VStack {
                 List {
                     ForEach(items.indices, id: \.self) { index in
-                        CommissionRow(data: $items[index], commission: commission)
+                        CommissionRow(sum: $items[index], commission: commission)
                             .listRowInsets(EdgeInsets())
                             .listRowBackground(Color.clear)
                             .padding(.vertical, 10)

@@ -21,7 +21,7 @@ struct CalculatingCellData: Identifiable, Equatable {
 
 struct CommissionRow: View {
     @Environment(\.colorScheme) var colorScheme
-    @Binding var data: CalculatingCellData
+    @Binding var sum: CalculatingCellData
     @State private var inputPrice: Double = 0
     @State private var inputQuantity: Int = 1
     @State private var value: Double = 0
@@ -39,6 +39,7 @@ struct CommissionRow: View {
                     set: { newValue in
                         if let doubleValue = Double(newValue.replacingOccurrences(of: ",", with: ".")) {
                             inputPrice = doubleValue
+                            sum.value = calculateCommission(price: inputPrice, quantity: inputQuantity, commission: commission)
                         }
                     }
                 ), placeholder: "0.00")
@@ -55,6 +56,7 @@ struct CommissionRow: View {
                     set: { newValue in
                         if let intValue = Int(newValue) {
                             inputQuantity = intValue
+                            sum.value = calculateCommission(price: inputPrice, quantity: inputQuantity, commission: commission)
                         }
                     }
                     
@@ -68,8 +70,11 @@ struct CommissionRow: View {
             HStack {
                 Button(action: {
                     dismissKeyboard()
-                    let newValue = (inputPrice - inputPrice/100 * commission) * Double(inputQuantity)
-                    data.value = newValue
+                   let newValue = (inputPrice - inputPrice/100 * commission) * Double(inputQuantity)
+                   sum.value = newValue
+                    
+                    sum.value = calculateCommission(price: inputPrice, quantity: inputQuantity, commission: commission)
+
                 }) {
                     Text("Sum")
                         .bold()
@@ -91,6 +96,12 @@ struct CommissionRow: View {
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .padding(.horizontal)
     }
+    
+    func calculateCommission(price: Double, quantity: Int, commission: Double) -> Double {
+        print("Calculate")
+        return (inputPrice - inputPrice/100 * commission) * Double(inputQuantity)
+        
+    }
 }
 
 //struct CalculatorCell_Preview: PreviewProvider {
@@ -105,7 +116,7 @@ struct CommissionRow: View {
     struct Preview: View {
         @State var testData = CalculatingCellData(id: UUID(), value: 4.44)
         var body: some View {
-            CommissionRow(data: $testData, commission: 20)
+            CommissionRow(sum: $testData, commission: 20)
         }
     }
     return Preview()
