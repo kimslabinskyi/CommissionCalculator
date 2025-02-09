@@ -19,41 +19,17 @@ struct CalculatingCellData: Identifiable, Equatable {
     var value: Double
 }
 
-struct CalculatingCell: View {
+struct CommissionRow: View {
     @Environment(\.colorScheme) var colorScheme
     @Binding var data: CalculatingCellData
-    @Binding var inputCommission: Double
     @State private var inputPrice: Double = 0
-    @State private var inputQuantity: Int = 0
+    @State private var inputQuantity: Int = 1
     @State private var value: Double = 0
+    let commission: Double
     
     var body: some View {
         VStack(alignment: .leading ) {
-            HStack {
-                Text("Commission: ")
-                    .font(.title)
-                    .minimumScaleFactor(0.5)
-                    .lineLimit(1)
-                
-                Spacer()
-                
-                CustomTextField(
-                    text: Binding(
-                        get: { inputCommission == 0 ? "" : String(inputCommission) },
-                        set: { newValue in
-                            if let doubleValue = Double(newValue.replacingOccurrences(of: ",", with: ".")) {
-                                inputCommission = doubleValue
-                            }
-                        }
-                    ),
-                    placeholder: "0 %")
-                .frame(width: 170, height: 50)
-            }
-            
-            Divider()
-            
-            
-            HStack {
+           HStack {
                 Text("Price: ")
                     .font(.headline)
                 Spacer()
@@ -75,14 +51,14 @@ struct CalculatingCell: View {
                 Spacer()
                 
                 CustomTextField(text: Binding(
-                    get: { inputQuantity == 0 ? "" : String(inputQuantity) },
+                    get: { inputQuantity == 1 ? "" : String(inputQuantity) },
                     set: { newValue in
                         if let intValue = Int(newValue) {
                             inputQuantity = intValue
                         }
                     }
                     
-                ), placeholder: "0")
+                ), placeholder: "1")
                 .frame(width: 170, height: 50)
             }
             
@@ -92,7 +68,7 @@ struct CalculatingCell: View {
             HStack {
                 Button(action: {
                     dismissKeyboard()
-                    let newValue = (inputPrice - inputPrice/100 * inputCommission) * Double(inputQuantity)
+                    let newValue = (inputPrice - inputPrice/100 * commission) * Double(inputQuantity)
                     data.value = newValue
                 }) {
                     Text("Sum")
@@ -104,7 +80,7 @@ struct CalculatingCell: View {
                 
                 Spacer()
                 
-                Text(String(format: "%.2f", (inputPrice - inputPrice/100 * inputCommission) * Double(inputQuantity)))
+                Text(String(format: "%.2f", (inputPrice - inputPrice/100 * commission) * Double(inputQuantity)))
                     .font(.title)
                     .padding(.horizontal)
             }
@@ -125,10 +101,15 @@ struct CalculatingCell: View {
 //    }
 //}
 
-//#Preview {
-//    let testData = CalculatingCellData(commission: 20, price: 100, quantity: 5)
-//    CalculatingCell(data: testData)
-//}
+#Preview {
+    struct Preview: View {
+        @State var testData = CalculatingCellData(id: UUID(), value: 4.44)
+        var body: some View {
+            CommissionRow(data: $testData, commission: 20)
+        }
+    }
+    return Preview()
+}
 
 
 extension UIApplication {

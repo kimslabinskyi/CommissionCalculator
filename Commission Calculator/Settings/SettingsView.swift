@@ -31,7 +31,21 @@ struct SettingsView: View {
                     dismissKeyboard()
                 }
                 
-                
+                HStack {
+                    Text("Reset all data")
+                        .font(.headline)
+                    
+                    Spacer()
+                    
+                    Button(action: {
+                        print("Reset all data")
+                        
+                    }, label: {
+                        Text("Reset")
+                    }) .padding()
+                    
+                    
+                }
                 
                 
             }

@@ -12,17 +12,18 @@ struct CommissionList: View {
     @State private var items: [CalculatingCellData] = [
         CalculatingCellData(value: 0.0)
     ]
-    @State private var commission: Double = 0
+    @State private var commission: Double = 20
     var totalSum: Double {
         items.reduce(0) { $0 + $1.value }
     }
+    
     
     var body: some View {
         NavigationStack {
             VStack {
                 List {
                     ForEach(items.indices, id: \.self) { index in
-                        CalculatingCell(data: $items[index], inputCommission: $commission)
+                        CommissionRow(data: $items[index], commission: commission)
                             .listRowInsets(EdgeInsets())
                             .listRowBackground(Color.clear)
                             .padding(.vertical, 10)
@@ -70,6 +71,11 @@ struct CommissionList: View {
             .navigationBarTitleDisplayMode(.inline)
         }
     }
+    
+//    private func deleteAllRows(){
+//        items.removeAll()
+//        items.append(CalculatingCellData(value: 0.0))
+//    }
     
     var gradientColors: [Color] {
         colorScheme == .dark
