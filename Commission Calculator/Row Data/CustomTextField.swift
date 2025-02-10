@@ -12,13 +12,6 @@ struct CustomTextField: View {
     @Binding var text: String
     let placeholder: String
     
-    private let formatter: NumberFormatter = {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.decimalSeparator = "."
-        return formatter
-    }()
-    
     var body: some View {
         TextField(placeholder, text: $text)
             .keyboardType(.decimalPad)

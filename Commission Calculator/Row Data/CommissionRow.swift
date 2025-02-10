@@ -25,6 +25,11 @@ struct CommissionRow: View {
     @State private var inputPrice: Double = 0
     @State private var inputQuantity: Int = 1
     @State private var value: Double = 0
+    var totalSum: Double {
+        print("Calculate")
+        return (inputPrice - inputPrice / 100 * commission) * Double(inputQuantity)
+    }
+    
     let commission: Double
     
     var body: some View {
@@ -37,10 +42,8 @@ struct CommissionRow: View {
                 CustomTextField(text: Binding(
                     get: { inputPrice == 0 ? "" : String(inputPrice) },
                     set: { newValue in
-                        if let doubleValue = Double(newValue.replacingOccurrences(of: ",", with: ".")) {
-                            inputPrice = doubleValue
-                            sum.value = calculateCommission(price: inputPrice, quantity: inputQuantity, commission: commission)
-                        }
+                        inputPrice = parseInputValue(from: newValue)
+                        sum.value = totalSum
                     }
                 ), placeholder: "0.00")
                 .frame(width: 170, height: 50)
@@ -56,7 +59,7 @@ struct CommissionRow: View {
                     set: { newValue in
                         if let intValue = Int(newValue) {
                             inputQuantity = intValue
-                            sum.value = calculateCommission(price: inputPrice, quantity: inputQuantity, commission: commission)
+                            sum.value = totalSum
                         }
                     }
                     
@@ -73,8 +76,6 @@ struct CommissionRow: View {
                    let newValue = (inputPrice - inputPrice/100 * commission) * Double(inputQuantity)
                    sum.value = newValue
                     
-                    sum.value = calculateCommission(price: inputPrice, quantity: inputQuantity, commission: commission)
-
                 }) {
                     Text("Sum")
                         .bold()
@@ -85,7 +86,13 @@ struct CommissionRow: View {
                 
                 Spacer()
                 
-                Text(String(format: "%.2f", (inputPrice - inputPrice/100 * commission) * Double(inputQuantity)))
+                if inputQuantity != 0 && inputQuantity != 1 {
+                    Text(String(format: "%.2f", (totalSum / Double(inputQuantity))))
+                        .font(.subheadline)
+                        .padding(.vertical)
+                }
+                
+                Text(String(format: "%.2f", (totalSum)))
                     .font(.title)
                     .padding(.horizontal)
             }
@@ -97,11 +104,11 @@ struct CommissionRow: View {
         .padding(.horizontal)
     }
     
-    func calculateCommission(price: Double, quantity: Int, commission: Double) -> Double {
-        print("Calculate")
-        return (inputPrice - inputPrice/100 * commission) * Double(inputQuantity)
-        
+    private func parseInputValue(from input: String) -> Double {
+        let sanitizedInput = input.replacingOccurrences(of: ",", with: ".")
+        return Double(sanitizedInput) ?? 0.0
     }
+    
 }
 
 //struct CalculatorCell_Preview: PreviewProvider {
