@@ -16,21 +16,20 @@ extension View {
 
 struct CalculatingCellData: Identifiable, Equatable {
     var id = UUID()
-    var value: Double
+    var price: Double
+    var quantity: Int
+    var result: Double
 }
 
 struct CommissionRow: View {
     @Environment(\.colorScheme) var colorScheme
-    @Binding var sum: CalculatingCellData
-    @State private var inputPrice: Double = 0
-    @State private var inputQuantity: Int = 1
-    @State private var value: Double = 0
-    var totalSum: Double {
-        print("Calculate")
-        return (inputPrice - inputPrice / 100 * commission) * Double(inputQuantity)
-    }
+    @Binding var row: CalculatingCellData
     
     let commission: Double
+    var totalSum: Double {
+        print("Calculate")
+        return (row.price - row.price / 100 * commission) * Double(row.quantity)
+    }
     
     var body: some View {
         VStack(alignment: .leading ) {
@@ -40,10 +39,10 @@ struct CommissionRow: View {
                 Spacer()
                 
                 CustomTextField(text: Binding(
-                    get: { inputPrice == 0 ? "" : String(inputPrice) },
+                    get: { row.price == 0 ? "" : String(row.price) },
                     set: { newValue in
-                        inputPrice = parseInputValue(from: newValue)
-                        sum.value = totalSum
+                        row.price = parseInputValue(from: newValue)
+                        row.result = totalSum
                     }
                 ), placeholder: "0.00")
                 .frame(width: 170, height: 50)
@@ -55,11 +54,11 @@ struct CommissionRow: View {
                 Spacer()
                 
                 CustomTextField(text: Binding(
-                    get: { inputQuantity == 1 ? "" : String(inputQuantity) },
+                    get: { row.quantity == 1 ? "" : String(row.quantity) },
                     set: { newValue in
                         if let intValue = Int(newValue) {
-                            inputQuantity = intValue
-                            sum.value = totalSum
+                            row.quantity = intValue
+                            row.result = totalSum
                         }
                     }
                     
@@ -73,9 +72,8 @@ struct CommissionRow: View {
             HStack {
                 Button(action: {
                     dismissKeyboard()
-                   let newValue = (inputPrice - inputPrice/100 * commission) * Double(inputQuantity)
-                   sum.value = newValue
-                    
+                   // let newValue = (row.price - row.price/100 * commission) * Double(row.quantity)
+                  // row.result = newValue
                 }) {
                     Text("Sum")
                         .bold()
@@ -86,8 +84,8 @@ struct CommissionRow: View {
                 
                 Spacer()
                 
-                if inputQuantity != 0 && inputQuantity != 1 {
-                    Text(String(format: "%.2f", (totalSum / Double(inputQuantity))))
+                if row.quantity != 0 && row.quantity != 1 {
+                    Text(String(format: "%.2f", (totalSum / Double(row.quantity))))
                         .font(.subheadline)
                         .padding(.vertical)
                 }
@@ -121,9 +119,9 @@ struct CommissionRow: View {
 
 #Preview {
     struct Preview: View {
-        @State var testData = CalculatingCellData(id: UUID(), value: 4.44)
+        @State var testData = CalculatingCellData(id: UUID(), price: 0, quantity: 1, result: 4.44)
         var body: some View {
-            CommissionRow(sum: $testData, commission: 20)
+            CommissionRow(row: $testData, commission: 20)
         }
     }
     return Preview()

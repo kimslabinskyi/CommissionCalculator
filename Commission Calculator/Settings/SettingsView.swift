@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SettingsView: View {
     @Binding var commission: Double
+    var deleteAllData: () -> Void
     var body: some View {
         NavigationStack {
             List {
@@ -38,8 +39,8 @@ struct SettingsView: View {
                     Spacer()
                     
                     Button(action: {
-                        print("Reset all data")
-                        
+                        print("Delete all data")
+                        deleteAllData()
                     }, label: {
                         Text("Reset")
                     }) .padding()
@@ -60,7 +61,7 @@ struct SettingsView: View {
 }
 
 #Preview {
-    SettingsView(commission: .constant(0.0))
+    SettingsView(commission: .constant(0.0), deleteAllData: {})
 }
 
 

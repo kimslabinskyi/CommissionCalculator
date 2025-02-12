@@ -10,11 +10,11 @@ import SwiftUI
 struct CommissionList: View {
     @Environment(\.colorScheme) var colorScheme
     @State private var items: [CalculatingCellData] = [
-        CalculatingCellData(value: 0.0)
+        CalculatingCellData(id: UUID(), price: 0, quantity: 1, result: 0)
     ]
     @State private var commission: Double = 20
     var totalSum: Double {
-        items.reduce(0) { $0 + $1.value }
+        items.reduce(0) { $0 + $1.result }
     }
     
     
@@ -23,7 +23,7 @@ struct CommissionList: View {
             VStack {
                 List {
                     ForEach(items.indices, id: \.self) { index in
-                        CommissionRow(sum: $items[index], commission: commission)
+                        CommissionRow(row: $items[index], commission: commission)
                             .listRowInsets(EdgeInsets())
                             .listRowBackground(Color.clear)
                             .padding(.vertical, 10)
@@ -48,7 +48,10 @@ struct CommissionList: View {
                 }
                 
                 ToolbarItem(placement: .navigationBarLeading) {
-                    NavigationLink(destination: SettingsView(commission: $commission)) {
+                    NavigationLink(destination: SettingsView(commission: $commission, deleteAllData: {
+                        items.removeAll()
+                        items.append(CalculatingCellData(price: 0, quantity: 1, result: 0))
+                    })) {
                         Image(systemName: "gear")
                             .imageScale(.large)
                             .foregroundColor(colorScheme == .dark ? .white : .black)
@@ -59,7 +62,7 @@ struct CommissionList: View {
                     Button {
                         withAnimation {
                             print(items)
-                            items.append(CalculatingCellData(value: 0.0))
+                            items.append(CalculatingCellData(price: 0.0, quantity: 1, result: 0.0))
                         }
                     } label: {
                         Image(systemName: "plus")
@@ -72,10 +75,6 @@ struct CommissionList: View {
         }
     }
     
-//    private func deleteAllRows(){
-//        items.removeAll()
-//        items.append(CalculatingCellData(value: 0.0))
-//    }
     
     var gradientColors: [Color] {
         colorScheme == .dark
