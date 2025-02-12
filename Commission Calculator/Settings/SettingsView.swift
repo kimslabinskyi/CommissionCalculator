@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @Binding var commission: Double
+    @Binding var commission: Int
     var deleteAllData: () -> Void
     var body: some View {
         NavigationStack {
@@ -20,14 +20,13 @@ struct SettingsView: View {
                     Spacer()
                     
                     CustomTextField(text: Binding(
-                        get: { commission == 0 ? "" : String(commission) },
+                        get: { commission == 0 || commission == 20 ? "" : String(commission) },
                         set: { newCommission in
-                            if let doubleValue = Double(newCommission) {
-                                commission = doubleValue
-                            }
+                                commission = Int(newCommission) ?? 0
                         }
-                    ), placeholder: "0 %")
+                    ), placeholder: "20 %")
                     .frame(width: 120, height: 50)
+                    
                 }.onTapGesture {
                     dismissKeyboard()
                 }
@@ -60,8 +59,17 @@ struct SettingsView: View {
     }
 }
 
+struct DoubleFormatter {
+    static let shared = DoubleFormatter()
+    
+    func formatted(from input: String) -> Double {
+        let sanitizedInput = input.replacingOccurrences(of: ",", with: ".")
+        return Double(sanitizedInput) ?? 0.0
+    }
+}
+
 #Preview {
-    SettingsView(commission: .constant(0.0), deleteAllData: {})
+    SettingsView(commission: .constant(0), deleteAllData: {})
 }
 
 

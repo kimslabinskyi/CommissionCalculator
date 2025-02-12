@@ -12,7 +12,7 @@ struct CommissionList: View {
     @State private var items: [CalculatingCellData] = [
         CalculatingCellData(id: UUID(), price: 0, quantity: 1, result: 0)
     ]
-    @State private var commission: Double = 20
+    @State private var commission: Int = 20
     var totalSum: Double {
         items.reduce(0) { $0 + $1.result }
     }

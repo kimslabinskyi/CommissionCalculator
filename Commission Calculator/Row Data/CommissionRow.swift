@@ -24,11 +24,10 @@ struct CalculatingCellData: Identifiable, Equatable {
 struct CommissionRow: View {
     @Environment(\.colorScheme) var colorScheme
     @Binding var row: CalculatingCellData
-    
-    let commission: Double
+    let commission: Int
     var totalSum: Double {
         print("Calculate")
-        return (row.price - row.price / 100 * commission) * Double(row.quantity)
+        return (row.price - row.price / 100 * Double(commission)) * Double(row.quantity)
     }
     
     var body: some View {
@@ -41,11 +40,16 @@ struct CommissionRow: View {
                 CustomTextField(text: Binding(
                     get: { row.price == 0 ? "" : String(row.price) },
                     set: { newValue in
-                        row.price = parseInputValue(from: newValue)
+                        print("row.price = \(row.price)")
+                        print("newValue = \(newValue)")
+                        row.price = DoubleFormatter.shared.formatted(from: newValue)
                         row.result = totalSum
                     }
                 ), placeholder: "0.00")
                 .frame(width: 170, height: 50)
+                .onAppear(){
+                    row.result = totalSum
+                }
             }
             
             HStack {
@@ -72,8 +76,6 @@ struct CommissionRow: View {
             HStack {
                 Button(action: {
                     dismissKeyboard()
-                   // let newValue = (row.price - row.price/100 * commission) * Double(row.quantity)
-                  // row.result = newValue
                 }) {
                     Text("Sum")
                         .bold()
@@ -100,11 +102,6 @@ struct CommissionRow: View {
         .background(colorScheme == .dark ? Color.black : Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .padding(.horizontal)
-    }
-    
-    private func parseInputValue(from input: String) -> Double {
-        let sanitizedInput = input.replacingOccurrences(of: ",", with: ".")
-        return Double(sanitizedInput) ?? 0.0
     }
     
 }
