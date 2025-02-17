@@ -25,10 +25,6 @@ struct CommissionRow: View {
     @Environment(\.colorScheme) var colorScheme
     @Binding var row: CalculatingCellData
     let commission: Int
-    var totalSum: Double {
-        print("Calculate")
-        return (row.price - row.price / 100 * Double(commission)) * Double(row.quantity)
-    }
     
     var body: some View {
         VStack(alignment: .leading ) {
@@ -38,18 +34,25 @@ struct CommissionRow: View {
                 Spacer()
                 
                 CustomTextField(text: Binding(
-                    get: { row.price == 0 ? "" : String(row.price) },
+                    get: { row.price == 0 ? "" : String(format: "%g", row.price) },
                     set: { newValue in
                         print("row.price = \(row.price)")
                         print("newValue = \(newValue)")
-                        row.price = DoubleFormatter.shared.formatted(from: newValue)
-                        row.result = totalSum
+                        
+                        if !newValue.isEmpty {
+                            row.price =  DoubleFormatter.shared.formatted(from: newValue)
+                            row.result = calculateSum(price: row.price, quantity: row.quantity, commission: commission)
+                        } else {
+                            row.price = 0
+                        }
+
                     }
                 ), placeholder: "0.00")
                 .frame(width: 170, height: 50)
                 .onAppear(){
-                    row.result = totalSum
+                    row.result = calculateSum(price: row.price, quantity: row.quantity, commission: commission)
                 }
+                
             }
             
             HStack {
@@ -62,7 +65,7 @@ struct CommissionRow: View {
                     set: { newValue in
                         if let intValue = Int(newValue) {
                             row.quantity = intValue
-                            row.result = totalSum
+                            row.result = calculateSum(price: row.price, quantity: row.quantity, commission: commission)
                         }
                     }
                     
@@ -87,12 +90,12 @@ struct CommissionRow: View {
                 Spacer()
                 
                 if row.quantity != 0 && row.quantity != 1 {
-                    Text(String(format: "%.2f", (totalSum / Double(row.quantity))))
+                    Text(String(format: "%.2f", (calculateSum(price: row.price, quantity: row.quantity, commission: commission) / Double(row.quantity))))
                         .font(.subheadline)
                         .padding(.vertical)
                 }
                 
-                Text(String(format: "%.2f", (totalSum)))
+                Text(String(format: "%.2f", (calculateSum(price: row.price, quantity: row.quantity, commission: commission))))
                     .font(.title)
                     .padding(.horizontal)
             }
@@ -104,15 +107,11 @@ struct CommissionRow: View {
         .padding(.horizontal)
     }
     
+    
+    func calculateSum(price: Double, quantity: Int, commission: Int) -> Double{
+        return (price - price / 100 * Double(commission)) * Double(quantity)
+    }
 }
-
-//struct CalculatorCell_Preview: PreviewProvider {
-//    static let testData = CalculatingCellData(commission: 20, price: 100, quantity: 5)
-//
-//    static var previews: some View {
-//        CalculatingCell(data: testData)
-//    }
-//}
 
 #Preview {
     struct Preview: View {

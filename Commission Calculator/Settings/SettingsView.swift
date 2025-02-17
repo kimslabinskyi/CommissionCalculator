@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SettingsView: View {
+    @State private var showingAlert = false
     @Binding var commission: Int
     var deleteAllData: () -> Void
     var body: some View {
@@ -47,6 +48,20 @@ struct SettingsView: View {
                     
                 }
                 
+                HStack {
+                    
+                    Button( action: {
+                        print("gg")
+                        showingAlert = true
+                    }, label: {
+                        Text("Developer info")
+                            .font(.headline)
+                            .padding()
+                    })
+                    .alert("Developer name: \n Kim Slabinskyi \n Email: kim.slabinskyi@gmail.com", isPresented: $showingAlert) {
+                        Button("OK", role: .cancel ) {}
+                    }
+                }
                 
             }
             .toolbar {
@@ -58,6 +73,7 @@ struct SettingsView: View {
         }
     }
 }
+
 
 struct DoubleFormatter {
     static let shared = DoubleFormatter()
@@ -73,12 +89,4 @@ struct DoubleFormatter {
 }
 
 
-/*
- * default commission
- * delete all actual data
- * enable haptics
- * developer info
- * currency
- 
- 
- */
+
