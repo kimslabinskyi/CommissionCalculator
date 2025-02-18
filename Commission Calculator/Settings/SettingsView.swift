@@ -15,17 +15,17 @@ struct SettingsView: View {
         NavigationStack {
             List {
                 HStack {
-                    Text("Set default commission")
+                    Text("Set default commission (%)")
                         .font(.headline)
                     
                     Spacer()
                     
                     CustomTextField(text: Binding(
-                        get: { commission == 0 || commission == 20 ? "" : String(commission) },
+                        get: { String(commission) },
                         set: { newCommission in
-                                commission = Int(newCommission) ?? 0
+                            commission = Int(newCommission) ?? 0
                         }
-                    ), placeholder: "20 %")
+                    ), placeholder: "")
                     .frame(width: 120, height: 50)
                     
                 }.onTapGesture {
@@ -51,7 +51,6 @@ struct SettingsView: View {
                 HStack {
                     
                     Button( action: {
-                        print("gg")
                         showingAlert = true
                     }, label: {
                         Text("Developer info")
