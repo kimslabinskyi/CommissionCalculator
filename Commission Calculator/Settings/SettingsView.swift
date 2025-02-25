@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @State private var showingAlert = false
+    @State private var showingSheet = false
     @Binding var commission: Int
     var deleteAllData: () -> Void
     var body: some View {
@@ -50,16 +50,16 @@ struct SettingsView: View {
                 
                 HStack {
                     
-                    Button( action: {
-                        showingAlert = true
-                    }, label: {
-                        Text("Developer info")
-                            .font(.headline)
-                            .padding()
-                    })
-                    .alert("Developer name: \n Kim Slabinskyi \n Email: kim.slabinskyi@gmail.com", isPresented: $showingAlert) {
-                        Button("OK", role: .cancel ) {}
+                    Button("Developer info") {
+                        showingSheet = true
                     }
+                    .font(.headline)
+                    .padding()
+                    .sheet(isPresented: $showingSheet) {
+                        DeveloperInfoView()
+                            .presentationDetents([.medium])
+                    }
+                    
                 }
                 
             }
@@ -87,5 +87,51 @@ struct DoubleFormatter {
     SettingsView(commission: .constant(0), deleteAllData: {})
 }
 
+
+struct DeveloperInfoView: View {
+    var body: some View {
+        
+        VStack(spacing: 50) {
+            HStack{
+                Text("Developer Name:")
+                    .font(.headline)
+                
+                Spacer()
+                
+                Text("Kim Slabinskyi")
+                    .font(.title3)
+                    .bold()
+            }
+            
+            HStack {
+                Text("Email:")
+                    .font(.headline)
+                
+                Spacer()
+                
+                Text("kim.slabinskyi@gmail.com")
+                    .font(.title3)
+                    .bold()
+            }
+            
+            Text("This application created for convenient commission calculation for online stores, and other services. Build with SwiftUI and Xcode 16.2. If you have any questions, or suggestions, write to my email.")
+            
+            
+            Button("Close") {
+                dismiss()
+                
+            }
+            .padding()
+            .bold()
+            .foregroundColor(.red)
+            
+        }
+        .padding()
+    }
+    
+    @Environment(\.dismiss) private var dismiss
+    
+    
+}
 
 
