@@ -17,7 +17,7 @@ struct SettingsView: View {
                 HStack {
                     Text("Set default commission (%)")
                         .font(.headline)
-                    
+                        .padding(.horizontal)
                     Spacer()
                     
                     CustomTextField(text: Binding(
@@ -27,6 +27,7 @@ struct SettingsView: View {
                         }
                     ), placeholder: "")
                     .frame(width: 120, height: 50)
+                    .padding(.horizontal)
                     
                 }.onTapGesture {
                     dismissKeyboard()
@@ -35,7 +36,7 @@ struct SettingsView: View {
                 HStack {
                     Text("Reset all data")
                         .font(.headline)
-                    
+                        .padding(.horizontal)
                     Spacer()
                     
                     Button(action: {
@@ -43,18 +44,26 @@ struct SettingsView: View {
                         deleteAllData()
                     }, label: {
                         Text("Reset")
-                    }) .padding()
+                    })
+                    .font(.headline)
+                    .padding(.horizontal)
+
                     
                     
                 }
                 
                 HStack {
+                    Text("Developer info")
+                        .font(.headline)
+                        .padding(.horizontal)
+                    Spacer()
                     
-                    Button("Developer info") {
+                    
+                    Button("Show") {
                         showingSheet = true
                     }
                     .font(.headline)
-                    .padding()
+                    .padding(.horizontal)
                     .sheet(isPresented: $showingSheet) {
                         DeveloperInfoView()
                             .presentationDetents([.medium])
@@ -62,12 +71,6 @@ struct SettingsView: View {
                     
                 }
                 
-            }
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Text("Settings")
-                        .font(.title)
-                }
             }
         }
     }

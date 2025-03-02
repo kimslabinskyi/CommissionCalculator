@@ -22,6 +22,7 @@ struct CalculatingCellData: Identifiable, Equatable {
 }
 
 struct CommissionRow: View {
+    @FocusState var isFocused: Bool
     @Environment(\.colorScheme) var colorScheme
     @Binding var row: CalculatingCellData
     let commission: Int
@@ -49,6 +50,7 @@ struct CommissionRow: View {
                     }
                 ), placeholder: "0.00")
                 .frame(width: 170, height: 50)
+                .focused($isFocused) 
                 .onAppear(){
                     row.result = calculateSum(price: row.price, quantity: row.quantity, commission: commission)
                 }
